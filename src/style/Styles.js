@@ -1,11 +1,17 @@
 import styled from 'styled-components';
+import { createGlobalStyle } from 'styled-components';
 
-const handleColorType = (color) => {
-	switch (color) {
+//  TODOS
+//  - ADD A +/- BUTTON *
+//  - ADD THEMING
+//  - THEMING MENU POPS UP AND FILLS THE PAGE
+
+const handleColorType = (type) => {
+	switch (type) {
 		case 'tool':
 			return '#cceabb';
 		case 'result':
-			return '#fdcb9e';
+			return '#ffcb9e';
 		default:
 			return '#f7f7f7';
 	}
@@ -23,10 +29,11 @@ export const Button = styled.div`
   user-select: none;
   border: 1px solid #eee;
 
-  background-color: ${(props) => handleColorType(props.color)};
+  background-color: ${(props) => handleColorType(props.type)};
 
   &:hover {
-    opacity: 0.8;
+    filter: brightness(90%);
+    -webkit-filter: brightness(90%);
     cursor: pointer;
   }
 	&:before {
@@ -39,8 +46,9 @@ export const Button = styled.div`
 export const Main = styled.div`
   background-color: #fff;
 
+  width: calc(280px + 3vw);
   padding: 30px;
-  box-shadow: 0px 3px 10px rgba(10, 10, 10, 0.2);
+  box-shadow: 0px 3px 3px rgba(10, 10, 10, 0.2);
   border: 1px solid #ccc;
   border-radius: 18px;
   position: absolute;
@@ -50,3 +58,18 @@ export const Main = styled.div`
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
 `;
+
+export const Credit = styled.div`
+  color: rgb(32, 32, 32);
+  
+  a {
+      background-color: rgb(32, 32, 32);
+      color: #fff;
+  }
+`;
+
+export const GlobalStyle = createGlobalStyle`
+  body {
+    background-color: rgb(255, 247, 236);
+  }
+`

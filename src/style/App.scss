@@ -8,13 +8,27 @@ body {
     grid-auto-rows: 1fr;
     grid-gap: 10px;
 
-    #clear, #zero {
+    #zero {
         grid-column-start: 1;
         grid-column-end: 3;
     }
 }
 
-#display {
+#result {
     text-align: right;
     margin-bottom: 30px;
+    h4, h1 {
+        word-wrap: break-word;
+    }
+}
+
+#credit {
+    position: absolute;
+    bottom: 0;
+    right: 30px;
+
+    a {
+        padding: 3px;
+        text-decoration: none;
+    }
 }

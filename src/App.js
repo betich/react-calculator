@@ -1,100 +1,109 @@
 import React from 'react';
 import './App.css';
-import {Main, Button} from './style/Styles.js';
+import { Main, Credit, GlobalStyle } from './style/Styles.js';
+import Editor from './components/calculator.js';
 
 const Display = (props) => {
   return (
-    <div id="display">
-      <h4>100 * 15</h4>
-      <h1>1500</h1>
+    <div id="result">
+      <h4 id="formula">{props.formula}</h4>
+      <h1 id="display">{props.output}</h1>
     </div>
   );
-}
-
-class CalcButton extends React.Component {
-  constructor(props) {
-    super(props);
-    this.props = props;
-    this.state = {
-      btnStyle: null
-    };
-    this.handleClick = this.handleClick.bind(this);
-    this.setActiveButton = this.setActiveButton.bind(this);
-  }
-  handleClick() {
-
-    this.setActiveButton();
-    setTimeout(() => this.setActiveButton(), 100)
-  }
-
-  setActiveButton() {
-    this.state.btnStyle === null ?
-      this.setState({
-        btnStyle: {
-          filter: "saturate(2) brightness(80%)",
-          webkitFilter: "saturate(2) brightness(80%)"
-        }
-      }) :
-      this.setState({
-        btnStyle: null
-      });
-  }
-
-  render() {
-    return (
-      <Button onClick={this.handleClick} color={this.props.color} id={this.props.id} style={this.state.btnStyle}>{this.props.symbol}</Button>
-    );
-  }
-
-}
-
-class Editor extends React.Component {
-  constructor(props) {
-    super(props);
-    this.props = props;
-  }
-
-  render() {
-    return (
-      <div id="editor">
-        <CalcButton color="tool" id="clear" symbol="C"></CalcButton>
-        <CalcButton color="tool" id="modulo" symbol="%"></CalcButton>
-        <CalcButton color="tool" id="divide" symbol="÷"></CalcButton>
-
-        <CalcButton id="nine" symbol="9"></CalcButton>
-        <CalcButton id="eight" symbol="8"></CalcButton>
-        <CalcButton id="seven" symbol="7"></CalcButton>
-        <CalcButton color="tool" id="multiply" symbol="×"></CalcButton>
-
-        <CalcButton id="six" symbol="6"></CalcButton>
-        <CalcButton id="five" symbol="5"></CalcButton>
-        <CalcButton id="four" symbol="4"></CalcButton>
-        <CalcButton color="tool" id="subtract" symbol="-"></CalcButton>
-
-        <CalcButton id="three" symbol="3"></CalcButton>
-        <CalcButton id="two" symbol="2"></CalcButton>
-        <CalcButton id="one" symbol="1"></CalcButton>
-        <CalcButton color="tool" id="add" symbol="+"></CalcButton>
-
-        <CalcButton id="zero" symbol="0"></CalcButton>
-        <CalcButton id="decimal" symbol="."></CalcButton>
-        <CalcButton color="result" id="equals" symbol="="></CalcButton>
-      </div>
-    );
-  }
 }
 
 class Calculator extends React.Component {
   constructor(props) {
     super(props);
     this.props = props;
+    this.state = {
+      formula: '',
+      display: 0,
+      formerDisplay: 0,
+      done: false
+    }
+    this.changeDisplay = this.changeDisplay.bind(this);
+    this.displayFormula = this.displayFormula.bind(this);
+    this.calculate = this.calculate.bind(this);
+  }
+
+  displayFormula(operator) {
+    let display = this.state.display < 0 ? '(' + this.state.display + ')' : this.state.display;
+    if (/\d/g.test(this.state.display)) {
+      // Is display a number?
+      this.setState({
+        formula: this.state.formula + display + operator,
+        formerDisplay: this.state.formula + display,
+        display: operator
+      });
+    } else if (/[-+×/]/g.test(this.state.display)) {
+      this.setState({
+        formula: this.state.formerDisplay + operator,
+        display: operator
+      });
+    }
+  }
+
+  calculate() {
+    let display = this.state.display < 0 ? '(' + this.state.display + ')' : this.state.display;
+    let currFormula = (this.state.formula.replace('×', '*') + this.state.display).split(/([/+*-])/g).join(' ');
+    let result = eval(currFormula);
+    this.setState({
+      formula: this.state.formula + display + '=' + result,
+      display: result,
+      done: true
+    });
+  }
+
+  changeDisplay(value, method) {
+    switch(method) {
+      case 'UPDATE':
+        if (this.state.done) {
+          this.setState({
+            formula: '',
+            display: value,
+            done: false
+          });
+        } else {
+          this.setState({ display: value });
+        }
+        break;
+      case 'EQUALS':
+        if (!this.state.done) {
+          this.calculate();
+        }
+        break;
+      case 'OPERATION':
+        if (this.state.done) {
+          this.setState({
+            formula: this.state.display,
+            display: 0,
+            done: false
+          }, () => {
+            this.displayFormula(value);
+          })
+        } else {
+          this.displayFormula(value);
+        }
+        break;
+      case 'CLEAR':
+        this.setState({
+          display: 0,
+          formerDisplay: 0,
+          formula: '',
+          done: false
+        });
+        break;
+      default:
+        console.warn('Unknown method');
+    }
   }
 
   render() {
     return (
       <Main>
-        <Display />
-        <Editor />
+        <Display output={this.state.display} formula={this.state.formula} />
+        <Editor changeDisplay={this.changeDisplay} done={this.state.done} />
       </Main>
     )
   }
@@ -102,7 +111,13 @@ class Calculator extends React.Component {
 
 function App() {
   return (
-    <Calculator />
+    <React.Fragment>
+      <GlobalStyle />
+      <Calculator />
+      <Credit id="credit">
+        <p>by <a href="https://www.github.com/betich" rel="noopener noreferrer" target="_blank">betich</a></p>
+      </Credit>
+    </React.Fragment>
   );
 }
 
