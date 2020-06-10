@@ -11,7 +11,7 @@ const handleColorType = (type) => {
 		case 'tool':
 			return '#cceabb';
 		case 'result':
-			return '#ffcb9e';
+			return '#FE9A9D';
 		default:
 			return '#f7f7f7';
 	}
@@ -29,7 +29,7 @@ export const Button = styled.div`
   user-select: none;
   border: 1px solid #eee;
 
-  background-color: ${(props) => handleColorType(props.type)};
+  background-color: ${({type}) => handleColorType(type)};
 
   &:hover {
     filter: brightness(90%);
@@ -45,9 +45,11 @@ export const Button = styled.div`
 
 export const Main = styled.div`
   background-color: #fff;
+  color: #000;
 
   width: calc(280px + 3vw);
   padding: 30px;
+  padding-top: 50px;
   box-shadow: 0px 3px 3px rgba(10, 10, 10, 0.2);
   border: 1px solid #ccc;
   border-radius: 18px;
@@ -70,6 +72,19 @@ export const Credit = styled.div`
 
 export const GlobalStyle = createGlobalStyle`
   body {
-    background-color: rgb(255, 247, 236);
+    background-color: #FEF9EF;
+  }
+  #result {
+    h1 {
+      font-size: 2em;
+      margin: 10px 0;
+      margin-bottom: 1.25em;
+    }
+    h4 {
+      font-size: 0.85em;
+      font-weight: 300;
+      font-family: 'Roboto Mono', Courier, monospace;
+      margin: 3px 0;
+    }
   }
 `

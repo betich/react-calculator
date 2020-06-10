@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button} from '../style/Styles.js';
+import { Button } from '../style/Styles.js';
 
 const buttons = [
 	{
@@ -141,6 +141,7 @@ class CalcButton extends React.Component {
 	}
 
 	setActiveButton() {
+
 			this.state.btnStyle === null ? this.setState({
 				btnStyle: {
 					filter: 'saturate(2) brightness(80%)',
@@ -174,7 +175,7 @@ class Editor extends React.Component {
 	getKeyValue(value) {
 		let currentDisplay = this.state.currentDisplay;
 
-		if (currentDisplay.length <= 17) {
+		if (Math.abs(currentDisplay).toString().length <= 13) {
 			if (currentDisplay === '0' && /[(0-9)]/.test(value)) {
 				// First Input?
 				this.setState({ currentDisplay: value.toString() }, () => {
@@ -182,7 +183,7 @@ class Editor extends React.Component {
 				});
 			} else if (/[-(0-9)]/g.test(value)) {
 				// Is the input a number?
-				this.setState({ currentDisplay: currentDisplay + value }, () => {
+				this.setState({ currentDisplay: currentDisplay + value.toString() }, () => {
 					this.props.changeDisplay(this.state.currentDisplay, 'UPDATE');
 				});
 			} else if (/[.]/g.test(value)) {
@@ -198,8 +199,8 @@ class Editor extends React.Component {
 			}
 		}
 
-		if (/[=+\-/*(Delete)(Backspace)]/g.test(value)) {
-            // Is input an operator?
+		if (/[=+\-/*(Delete)(Backspace)(PlusMinus)]/g.test(value)) {
+			// Is input an operator?
 			if (value === 'Backspace') {
 				if (currentDisplay.length > 1) {
 					this.setState({ currentDisplay: currentDisplay.slice(0, -1) }, () => {
@@ -211,12 +212,14 @@ class Editor extends React.Component {
 					});
 				}
 				return;
-			} else if (value === '-' && (currentDisplay === '0' || currentDisplay === '-') && !this.props.done) {
+			}
+			else if (value === '-' && (currentDisplay === '0' || currentDisplay === '-') && !this.props.done) {
 				this.setState({ currentDisplay: '-' }, () => {
 					this.props.changeDisplay('-', 'UPDATE');
 				});
 				return;
-			} else {
+			}
+			else {
 				switch (value) {
 					case '=':
 						this.props.changeDisplay(currentDisplay, 'EQUALS');
@@ -237,11 +240,10 @@ class Editor extends React.Component {
 						if (this.state.currentDisplay !== '0' && this.state.currentDisplay !== '-') {
 							let invNum = -parseInt(this.state.currentDisplay).toString();
 							this.setState({ currentDisplay: invNum }, () => {
-								this.props.changeDisplay(this.state.currentDisplay, 'UPDATE')
+								this.props.changeDisplay(this.state.currentDisplay, 'UPDATE');
 							});
-							return
 						}
-						break;
+						return;
 					case 'Delete':
 						this.props.changeDisplay(currentDisplay, 'CLEAR');
 						this.setState({ currentDisplay: '0' });
@@ -250,9 +252,8 @@ class Editor extends React.Component {
 						console.warn('Unknown Value');
 				}
 			}
+
 			this.setState({ currentDisplay: '0' });
-		} else {
-			this.setState(null);
 		}
 	}
 
