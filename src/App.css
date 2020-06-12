@@ -15,10 +15,28 @@ body {
 
 #result {
   text-align: right;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 }
-#result h4, #result h1 {
+#result #formula, #result #display {
+  margin: 7px 0;
   word-wrap: break-word;
+}
+
+#themeswitch {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  right: 20px;
+  top: 20px;
+  z-index: 2;
+}
+#themeswitch * {
+  display: inline-block;
+  margin: 0 5px;
+}
+#themeswitch #theme {
+  font-size: 1.15em;
+  margin-right: 15px;
 }
 
 #credit {

@@ -1,13 +1,16 @@
 import React from 'react';
+import { ThemeProvider } from 'styled-components';
 import './App.css';
 import { Main, Credit, GlobalStyle } from './style/Styles.js';
 import Editor from './components/calculator.js';
+import { ColorPicker, themes } from './components/themes.js';
 
 const Display = (props) => {
   return (
     <div id="result">
       <h4 id="formula">{props.formula}</h4>
-      <h1 id="display">{props.output}</h1>
+      <h2 id="display">{props.output}</h2>
+      <hr />
     </div>
   );
 }
@@ -109,16 +112,33 @@ class Calculator extends React.Component {
   }
 }
 
-function App() {
-  return (
-    <React.Fragment>
-      <GlobalStyle />
-      <Calculator />
-      <Credit id="credit">
-        <p>by <a href="https://www.github.com/betich" rel="noopener noreferrer" target="_blank">betich</a></p>
-      </Credit>
-    </React.Fragment>
-  );
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.props = props;
+    this.state = {
+      theme: themes[0]
+    }
+    this.setTheme = this.setTheme.bind(this);
+  }
+
+  setTheme(theme) {
+    this.setState({ theme: theme });
+  }
+
+  render() {
+    return (
+      <ThemeProvider theme={this.state.theme}>
+        <GlobalStyle />
+
+        <ColorPicker setTheme={this.setTheme} />
+        <Calculator />
+        <Credit id="credit">
+          <p>by <a href="https://www.github.com/betich" rel="noopener noreferrer" target="_blank">betich</a></p>
+        </Credit>
+      </ThemeProvider>
+    );
+  }
 }
 
 export default App;

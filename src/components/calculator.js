@@ -141,16 +141,15 @@ class CalcButton extends React.Component {
 	}
 
 	setActiveButton() {
-
-			this.state.btnStyle === null ? this.setState({
-				btnStyle: {
-					filter: 'saturate(2) brightness(80%)',
-					WebkitFilter: 'saturate(2) brightness(80%)'
-				}
-			}) :
-			this.setState({
-				btnStyle: null
-			});
+		this.state.btnStyle === null ? this.setState({
+			btnStyle: {
+				filter: 'saturate(2) brightness(80%)',
+				WebkitFilter: 'saturate(2) brightness(80%)'
+			}
+		}) :
+		this.setState({
+			btnStyle: null
+		});
 	}
 
 	render() {
@@ -202,24 +201,27 @@ class Editor extends React.Component {
 		if (/[=+\-/*(Delete)(Backspace)(PlusMinus)]/g.test(value)) {
 			// Is input an operator?
 			if (value === 'Backspace') {
-				if (currentDisplay.length > 1) {
+				if (
+					(!currentDisplay.includes('-') && currentDisplay.length > 1) ||
+					(currentDisplay.includes('-') && currentDisplay.length > 2)
+				) {
+					// Display's length is longer that 1?
 					this.setState({ currentDisplay: currentDisplay.slice(0, -1) }, () => {
 						this.props.changeDisplay(this.state.currentDisplay, 'UPDATE');
 					});
 				} else {
+					// Display's length is less than one.
 					this.setState({ currentDisplay: '0' }, () => {
 						this.props.changeDisplay(this.state.currentDisplay, 'UPDATE');
 					});
 				}
 				return;
-			}
-			else if (value === '-' && (currentDisplay === '0' || currentDisplay === '-') && !this.props.done) {
+			} else if (value === '-' && (currentDisplay === '0' || currentDisplay === '-') && !this.props.done) {
 				this.setState({ currentDisplay: '-' }, () => {
 					this.props.changeDisplay('-', 'UPDATE');
 				});
 				return;
-			}
-			else {
+			} else {
 				switch (value) {
 					case '=':
 						this.props.changeDisplay(currentDisplay, 'EQUALS');
@@ -238,8 +240,8 @@ class Editor extends React.Component {
 						break;
 					case 'PlusMinus':
 						if (this.state.currentDisplay !== '0' && this.state.currentDisplay !== '-') {
-							let invNum = -parseInt(this.state.currentDisplay).toString();
-							this.setState({ currentDisplay: invNum }, () => {
+							let invNum = -parseInt(this.state.currentDisplay);
+							this.setState({ currentDisplay: invNum.toString() }, () => {
 								this.props.changeDisplay(this.state.currentDisplay, 'UPDATE');
 							});
 						}

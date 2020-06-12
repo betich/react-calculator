@@ -16,9 +16,29 @@ body {
 
 #result {
     text-align: right;
-    margin-bottom: 30px;
-    h4, h1 {
+    margin-bottom: 20px;
+
+    #formula, #display {
+        margin: 7px 0;
         word-wrap: break-word;
+    }
+}
+
+#themeswitch {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    right: 20px;
+    top: 20px;
+    z-index: 2;
+
+    & * {
+        display: inline-block;
+        margin: 0 5px;
+    }
+    #theme {
+        font-size: 1.15em;
+        margin-right: 15px;
     }
 }
 
