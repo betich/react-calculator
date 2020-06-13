@@ -16,7 +16,7 @@ export const Button = styled.div`
   font-size: 1.25em;
   font-family: 'Roboto Mono', Courier, monospace;
 	padding: 25px;
-	border-radius: 40px;
+	border-radius: 20px;
 	text-align: center;
 	display: flex;
 	justify-content: center;
