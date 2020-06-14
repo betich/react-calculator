@@ -2,7 +2,7 @@
 
 ![Screenshot](https://www.dl.dropboxusercontent.com/s/9ase2v8t5pr2clv/react-calculator.png?dl=0 "Screenshot")
 
-Codepen Link: https://github.com/betich/react-calculator
+Codepen Link: https://codepen.io/Betich/full/rNxebKW
 
 ## Installation
 
